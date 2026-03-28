@@ -142,6 +142,16 @@ html, body {
   height: 100%;
 }
 
+/* How I Got Here connecting line — instant reset, delayed grow */
+.hig-line {
+  height: 0;
+  transition: height 0s;
+}
+.slide.active .hig-line {
+  height: 100%;
+  transition: height 1.8s ease-out 1s;
+}
+
 /* Graph line draw — transitions when slide becomes active */
 .graph-line-red {
   stroke-dasharray: 1200;

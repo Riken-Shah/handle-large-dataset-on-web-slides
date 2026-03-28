@@ -64,21 +64,14 @@ const speakerNotes: string[][] = [
     "Solves memory, DOM, scoping. But it needs fast random access reads — individual items on scroll.",
     "And no built-in mutation tracking. Closest to what we need, but not the full answer.",
   ],
-  // Slide 11 — Each Storage Has a Strength
-  [
-    "I benchmarked IDB against SQLite WASM on OPFS. 100K tasks, real queries.",
-    "Random access — the one windowing needs — OPFS is 4.4x faster. 8.5ms vs 37.6ms.",
-    "Sequential reads — IDB wins by 1.9x. Writes — OPFS 2.4x faster.",
-    "Neither is strictly better. Each has a strength. What if we use both?",
-  ],
-  // Slide 12 — What If We Only Load What's Visible?
+  // Slide 11 — What If We Only Load What's Visible?
   [
     "A viewport-aware, reactive rendering engine. Only loads what users see.",
     "Architecture: UI at the top, EntityStore in the middle — holds indexes plus hydrated visible entities — Database and Disk below.",
     "Look at the right side — items in the dataset, only the visible ones are hydrated. The rest are lightweight indexes.",
     "Scroll in → hydrate. Scroll out → unload. Memory stays flat.",
   ],
-  // Slide 13 — How EntityStore Works
+  // Slide 12 — How EntityStore Works
   [
     "Here's how the observable query system works.",
     "Step one: you register your query with EntityStore.",
@@ -87,13 +80,20 @@ const speakerNotes: string[][] = [
     "Step four: minimal re-renders — only the affected visible entity re-renders. Everything else stays untouched.",
     "Query once, observe forever.",
   ],
-  // Slide 14 — How We Do This: MobX
+  // Slide 13 — How We Do This: MobX
   [
     "EntityStore uses MobX under the hood. Each entity is independently observable.",
     "Without MobX — left side — entire list re-queries and diffs. O(n).",
     "With MobX — right side — only the changed card re-renders. O(1). Surgical.",
     "And remember: a task is never just a task. Properties, tags, comments, assets. 1 task = ~9 entities. MobX makes each one independently observable.",
     "Credit to the Linear team for pioneering this pattern.",
+  ],
+  // Slide 14 — Each Storage Has a Strength
+  [
+    "I benchmarked IDB against SQLite WASM on OPFS. 100K tasks, real queries.",
+    "Random access — the one windowing needs — OPFS is 4.4x faster. 8.5ms vs 37.6ms.",
+    "Sequential reads — IDB wins by 1.9x. Writes — OPFS 2.4x faster.",
+    "Neither is strictly better. Each has a strength. What if we use both?",
   ],
   // Slide 15 — Why Indexes Instead of Full Entities?
   [
@@ -110,19 +110,20 @@ const speakerNotes: string[][] = [
   ],
   // Slide 17 — The Numbers
   [
-    "The proof. Before: 350MB. Freezes. After: 7MB. 50x reduction.",
-    "250ms to interactive with 25,000 tasks.",
+    "The proof. IDB with 25K tasks: 545MB. Page freezes. Even with sharding the DB.",
+    "Two-tier with the same 25K tasks: 44MB. 12x reduction.",
+    "600ms to interactive — vs 7,600ms with IDB. That's 12x faster startup.",
   ],
   // Slide 18 — Memory Stays Flat
   [
-    "Look at the graph. Naive approach — red line shoots up linearly. 10K to 100K goes from 140MB to 1.4GB.",
-    "Two-tier — green line stays flat. ~7MB to ~9MB. About 10% growth.",
-    "This works at 5K or 500K.",
+    "Look at the graph. IDB — red line shoots up super-linearly. 25K at 545MB, 50K at 1GB, 100K at 3GB. Even with sharding.",
+    "Two-tier — green line stays nearly flat. 44MB to 60MB to 90MB. About 2x growth across 4x the data.",
+    "This works at 25K or 500K.",
   ],
   // Slide 19 — Closing
   [
     "The best sync engine in the world doesn't matter if your app takes 3 seconds to load a task list.",
-    "The unglamorous work is what makes local-first apps feel fast.",
+    "This is the second part of building a local-first app. It should truly be local-first — no matter what.",
     "And none of it required a third-party library.",
     "Thank you.",
   ],

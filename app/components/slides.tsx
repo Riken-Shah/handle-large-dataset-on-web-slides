@@ -67,17 +67,20 @@ export function Slide2() {
    ═══════════════════════════════════════ */
 export function Slide3() {
   return (
-    <div className="flex flex-col items-center justify-center gap-6 max-w-4xl w-full">
+    <div className="flex flex-col items-center justify-center gap-6 max-w-5xl w-full">
       <A delay={0}><h2 className="slide-heading text-center">How I Got Here</h2></A>
-      <div className="flex items-start gap-8 mt-4 w-full">
+      <div className="flex items-center gap-12 mt-2 w-full">
         <A delay={2} animation="scale">
-          <div className="flex-shrink-0 w-72 rounded-xl overflow-hidden border border-gray-700">
+          <div className="flex-shrink-0 w-[420px] rounded-xl overflow-hidden border border-gray-700">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/tasks-app.jpeg" alt="Tasks App" className="w-full h-auto block" />
           </div>
         </A>
         <div className="flex flex-col gap-0 flex-1 relative">
-          <div className="absolute left-5 top-4 bottom-4 w-px bg-gray-700" />
+          {/* Animated connecting line */}
+          <div className="absolute left-5 top-5 bottom-5 w-px overflow-hidden">
+            <div className="hig-line w-full bg-gradient-to-b from-white/40 via-white/20 to-red-500/40" />
+          </div>
           {[
             {step:"01",text:"Built Tasks: 700K+ downloads, 4.8 stars",delay:3},
             {step:"02",text:"Custom CRDT sync engine, no third-party libs",delay:5},
@@ -85,7 +88,7 @@ export function Slide3() {
             {step:"04",text:"Tested with real data. App collapsed at 10K tasks.",delay:9},
           ].map(item=>(
             <A key={item.step} delay={item.delay} animation="right">
-              <div className="flex items-center gap-4 py-3">
+              <div className="flex items-center gap-4 py-3.5">
                 <div className="w-10 h-10 rounded-full border-2 border-white flex items-center justify-center text-sm font-bold z-10 bg-black slide-mono flex-shrink-0">{item.step}</div>
                 <p className="slide-body text-sm">{item.text}</p>
               </div>
@@ -158,7 +161,7 @@ export function Slide4() {
       </div>
 
       <A delay={10}><p className="text-gray-500 text-sm italic text-center">Same app. Same code. Just more data.</p></A>
-      <A delay={12} animation="pop"><p className="text-sm font-medium text-center">Local-first ≠ all data in memory.</p></A>
+      <A delay={12} animation="pop"><p className="text-sm font-medium text-center">Local-first ≠ Janky Experience</p></A>
     </div>
   );
 }
@@ -179,9 +182,9 @@ export function Slide5() {
       <A delay={1}><p className="text-sm text-gray-500 text-center">Each one nearly killed the web version.</p></A>
       <div className="grid grid-cols-2 gap-5 mt-4 w-full max-w-2xl">
         {problems.map((p, i) => (
-          <A key={p.n} delay={3 + i * 2} animation="scale">
-            <div className="diagram-node flex items-center gap-4 p-4">
-              <div className="flex-shrink-0">{p.icon}</div>
+          <A key={p.n} delay={3 + i * 2} animation="scale" className="h-full">
+            <div className="diagram-node flex flex-col items-center justify-center text-center gap-3 p-5 h-full">
+              <div>{p.icon}</div>
               <div>
                 <p className="text-xs text-gray-500 slide-mono">{p.n}</p>
                 <p className="font-semibold text-lg">{p.title}</p>
@@ -303,8 +306,8 @@ function Toggle({ on, fail }: { on: boolean; fail?: boolean }) {
   );
 }
 
-function ApproachRow({ name, desc, memory, dom, updates, delay }: {
-  name: string; desc: string; memory: boolean; dom: boolean; updates: boolean; delay: number;
+function ApproachRow({ name, desc, memory, dom, updates, ux, delay }: {
+  name: string; desc: string; memory: boolean; dom: boolean; updates: boolean; ux: boolean; delay: number;
 }) {
   return (
     <A delay={delay} animation="right">
@@ -326,6 +329,10 @@ function ApproachRow({ name, desc, memory, dom, updates, delay }: {
             <Toggle on={updates} fail={!updates} />
             <span className={`text-xs ${updates ? "text-white" : "text-gray-600"}`}>Updates</span>
           </div>
+          <div className="flex items-center gap-2">
+            <Toggle on={ux} fail={!ux} />
+            <span className={`text-xs ${ux ? "text-white" : "text-gray-600"}`}>UX</span>
+          </div>
         </div>
       </div>
     </A>
@@ -342,19 +349,19 @@ export function Slide9() {
         <ApproachRow
           name="Pagination"
           desc="Split into pages, load one at a time"
-          memory={true} dom={true} updates={false}
+          memory={true} dom={true} updates={false} ux={false}
           delay={3}
         />
         <ApproachRow
           name="Virtualization"
           desc="Recycle DOM nodes, all data in heap"
-          memory={false} dom={true} updates={false}
+          memory={false} dom={true} updates={false} ux={true}
           delay={5}
         />
         <ApproachRow
           name="Windowing"
           desc="Load + render only near viewport"
-          memory={true} dom={true} updates={false}
+          memory={true} dom={true} updates={false} ux={true}
           delay={7}
         />
       </div>
@@ -414,38 +421,38 @@ export function Slide10() {
    IDB vs OPFS Benchmark — reference-style bars
    ═══════════════════════════════════════ */
 
-function BenchBar({ label, value, unit, pct, winner, animDelay }: {
-  label: string; value: string; unit: string; pct: number; winner: boolean; animDelay: string;
+function BenchBar({ label, value, unit, pct, winner, animDelay, compact }: {
+  label: string; value: string; unit: string; pct: number; winner: boolean; animDelay: string; compact?: boolean;
 }) {
   return (
-    <div className="flex items-center gap-4">
-      <span className={`text-sm slide-mono w-12 text-right flex-shrink-0 ${winner ? "text-green-400" : "text-red-400"}`}>{label}</span>
-      <div className="flex-1 h-10 rounded-lg overflow-hidden relative" style={{ background: "rgba(255,255,255,0.06)" }}>
+    <div className={`flex items-center ${compact ? "gap-2" : "gap-3"}`}>
+      <span className={`text-sm slide-mono ${compact ? "w-10" : "w-12"} text-right flex-shrink-0 ${winner ? "text-green-400" : "text-red-400"}`}>{label}</span>
+      <div className={`flex-1 ${compact ? "h-7" : "h-9"} rounded-lg overflow-hidden relative`} style={{ background: "rgba(255,255,255,0.06)" }}>
         <div
           className={`h-full rounded-lg bar-animate ${winner ? "bg-green-500/80" : "bg-red-400/70"}`}
           style={{ "--expand-width": `${pct}%`, animationDelay: animDelay } as React.CSSProperties}
         />
       </div>
-      <span className="text-sm slide-mono text-gray-300 w-24 flex-shrink-0">{value} {unit}</span>
+      <span className={`text-xs slide-mono text-gray-300 ${compact ? "w-16" : "w-20"} flex-shrink-0`}>{value} {unit}</span>
     </div>
   );
 }
 
 export function Slide11() {
   return (
-    <div className="flex flex-col items-center justify-center gap-5 max-w-5xl w-full">
+    <div className="flex flex-col items-center justify-center gap-5 max-w-3xl w-full">
       <A delay={0}><h2 className="slide-heading text-center">Each Storage Has a Strength</h2></A>
       <A delay={1}><p className="text-xs text-gray-500 text-center slide-mono">100K tasks · real queries · median of 3 runs</p></A>
 
       {/* Hero: Random Access — large, bordered, full width */}
       <A delay={2}>
-        <div className="w-full border border-gray-700 rounded-2xl p-8 mt-2">
-          <div className="flex items-baseline justify-between mb-6">
-            <div className="flex items-baseline gap-4">
-              <p className="text-xl font-bold">Random Access</p>
-              <p className="text-sm text-gray-500">most important for our use case</p>
+        <div className="w-full border border-gray-700 rounded-2xl p-6 px-8 mt-2">
+          <div className="flex items-baseline justify-between mb-5 gap-6">
+            <div className="flex items-baseline gap-3">
+              <p className="text-lg font-bold">Random Access</p>
+              <p className="text-xs text-gray-500">most important for our use case</p>
             </div>
-            <p className="text-xl font-bold text-green-400 slide-mono">OPFS 4.4×</p>
+            <p className="text-lg font-bold text-green-400 slide-mono flex-shrink-0">OPFS 4.4×</p>
           </div>
           <div className="flex flex-col gap-4">
             <BenchBar label="IDB" value="37.6" unit="ms" pct={100} winner={false} animDelay="0.4s" />
@@ -454,30 +461,30 @@ export function Slide11() {
         </div>
       </A>
 
-      {/* Secondary: Sequential + Writes — side by side, full width */}
-      <div className="grid grid-cols-2 gap-8 w-full mt-1">
+      {/* Secondary: Sequential + Writes — side by side */}
+      <div className="grid grid-cols-2 gap-6 w-full mt-1">
         <A delay={6}>
           <div>
-            <div className="flex items-baseline justify-between mb-4">
-              <p className="font-bold">Sequential Reads</p>
-              <p className="font-bold text-green-400 slide-mono">IDB 1.9×</p>
+            <div className="flex items-baseline justify-between mb-3">
+              <p className="font-bold text-sm">Sequential Reads</p>
+              <p className="font-bold text-sm text-green-400 slide-mono">IDB 1.9×</p>
             </div>
-            <div className="flex flex-col gap-3">
-              <BenchBar label="IDB" value="2,061" unit="ms" pct={52} winner={true} animDelay="0.8s" />
-              <BenchBar label="OPFS" value="3,993" unit="ms" pct={100} winner={false} animDelay="1.0s" />
+            <div className="flex flex-col gap-2">
+              <BenchBar label="IDB" value="2,061" unit="ms" pct={52} winner={true} animDelay="0.8s" compact />
+              <BenchBar label="OPFS" value="3,993" unit="ms" pct={100} winner={false} animDelay="1.0s" compact />
             </div>
           </div>
         </A>
 
         <A delay={9}>
           <div>
-            <div className="flex items-baseline justify-between mb-4">
-              <p className="font-bold">Writes</p>
-              <p className="font-bold text-green-400 slide-mono">OPFS 2.4×</p>
+            <div className="flex items-baseline justify-between mb-3">
+              <p className="font-bold text-sm">Writes</p>
+              <p className="font-bold text-sm text-green-400 slide-mono">OPFS 2.4×</p>
             </div>
-            <div className="flex flex-col gap-3">
-              <BenchBar label="IDB" value="75.2" unit="s" pct={100} winner={false} animDelay="1.2s" />
-              <BenchBar label="OPFS" value="30.8" unit="s" pct={41} winner={true} animDelay="1.4s" />
+            <div className="flex flex-col gap-2">
+              <BenchBar label="IDB" value="75.2" unit="s" pct={100} winner={false} animDelay="1.2s" compact />
+              <BenchBar label="OPFS" value="30.8" unit="s" pct={41} winner={true} animDelay="1.4s" compact />
             </div>
           </div>
         </A>
@@ -676,10 +683,10 @@ export function Slide13() {
 
       {/* Bottom tagline */}
       <A delay={17} animation="pop">
-        <p className="text-center whitespace-nowrap">
-          <span className="font-bold text-base">Query once → observe forever.</span>
-          <span className="text-gray-500 ml-2 text-base">Minimal re-renders. No recomputation.</span>
-        </p>
+        <div className="text-center">
+          <p className="font-bold text-base">Query once → observe forever.</p>
+          <p className="text-gray-500 text-base">Minimal re-renders. No recomputation.</p>
+        </div>
       </A>
     </div>
   );
@@ -754,22 +761,22 @@ export function Slide15() {
   const fullFields = ["observable fields","proxy wrappers","junction maps","computed getters","autoload data","full content"];
   const indexFields = ["id","order","componentId","computedState"];
   return (
-    <div className="flex flex-col items-center justify-center gap-4 max-w-5xl w-full">
+    <div className="flex flex-col items-center justify-center gap-4 max-w-3xl w-full">
       <A delay={0}><h2 className="slide-heading text-center">Why Indexes Instead of Full Entities?</h2></A>
 
-      {/* Cards + bar graph side by side */}
-      <div className="flex items-start gap-8 mt-2 w-full" style={{maxWidth:"60rem"}}>
+      {/* Cards + bar graph */}
+      <div className="flex flex-col items-center gap-6 mt-2 w-full">
 
-        {/* Left column: two cards stacked with vs */}
-        <div className="flex items-stretch gap-4 flex-1">
+        {/* Top: two cards side by side with vs */}
+        <div className="flex items-stretch gap-6 w-full">
           {/* Full Entity card */}
-          <A delay={2}>
-            <div className="border border-red-500/20 rounded-xl p-5 w-56 flex flex-col" style={{background:"rgba(239,68,68,0.03)"}}>
+          <A delay={2} className="flex-1">
+            <div className="border border-red-500/20 rounded-xl p-6 px-7 h-full flex flex-col" style={{background:"rgba(239,68,68,0.03)"}}>
               <p className="font-bold text-lg mb-1">Full Entity</p>
               <p className="text-[10px] text-gray-600 mb-3">What MobX loads per task</p>
-              <div className="flex flex-col gap-2 mb-4">
+              <div className="flex flex-col gap-2.5 mb-4">
                 {fullFields.map(f=>(
-                  <div key={f} className="flex items-center gap-2">
+                  <div key={f} className="flex items-center gap-2.5">
                     <div className="w-2 h-2 rounded-full bg-red-400/50 flex-shrink-0" />
                     <span className="text-xs text-gray-300 slide-mono">{f}</span>
                   </div>
@@ -790,13 +797,13 @@ export function Slide15() {
           </div>
 
           {/* Index Only card */}
-          <A delay={6}>
-            <div className="border border-green-500/20 rounded-xl p-5 w-48 flex flex-col" style={{background:"rgba(34,197,94,0.03)"}}>
+          <A delay={6} className="flex-1">
+            <div className="border border-green-500/20 rounded-xl p-6 px-7 h-full flex flex-col" style={{background:"rgba(34,197,94,0.03)"}}>
               <p className="font-bold text-lg mb-1">Index Only</p>
               <p className="text-[10px] text-gray-600 mb-3">What we keep in memory</p>
-              <div className="flex flex-col gap-2 mb-4">
+              <div className="flex flex-col gap-2.5 mb-4">
                 {indexFields.map(f=>(
-                  <div key={f} className="flex items-center gap-2">
+                  <div key={f} className="flex items-center gap-2.5">
                     <div className="w-2 h-2 rounded-full bg-green-400/50 flex-shrink-0" />
                     <span className="text-xs text-white slide-mono">{f}</span>
                   </div>
@@ -810,13 +817,15 @@ export function Slide15() {
           </A>
         </div>
 
-        {/* Right column: bar graph comparison */}
-        <A delay={8}>
-          <div className="flex flex-col gap-2 w-72 mt-4">
-            <p className="text-xs text-gray-500 uppercase tracking-widest mb-2">Memory Comparison</p>
+        {/* Bottom: bar graph comparison */}
+        <div className="w-full">
+          <A delay={8}>
+            <p className="text-xs text-gray-500 uppercase tracking-widest mb-3">Memory Comparison</p>
+          </A>
 
-            {/* Full Entity bar */}
-            <div>
+          {/* Full Entity bar */}
+          <A delay={9}>
+            <div className="mb-3">
               <div className="flex justify-between text-xs mb-1">
                 <span className="text-gray-400 slide-mono">Full Entity</span>
                 <span className="text-red-400 slide-mono font-bold">350 MB</span>
@@ -825,9 +834,11 @@ export function Slide15() {
                 <div className="h-full rounded bg-red-500/50 idx-bar-full" />
               </div>
             </div>
+          </A>
 
-            {/* Index Only bar */}
-            <div className="mt-2">
+          {/* Index Only bar */}
+          <A delay={11}>
+            <div>
               <div className="flex justify-between text-xs mb-1">
                 <span className="text-gray-400 slide-mono">Index Only</span>
                 <span className="text-green-400 slide-mono font-bold">5 MB</span>
@@ -836,14 +847,16 @@ export function Slide15() {
                 <div className="h-full rounded bg-green-500/50 idx-bar-index" />
               </div>
             </div>
+          </A>
 
-            {/* 70x callout */}
+          {/* 70x callout */}
+          <A delay={13} animation="pop">
             <div className="mt-4 pt-4 border-t border-gray-800 text-center">
               <span className="text-4xl font-bold">70x</span>
               <p className="text-sm text-gray-400 mt-1">less memory</p>
             </div>
-          </div>
-        </A>
+          </A>
+        </div>
       </div>
     </div>
   );
@@ -929,9 +942,9 @@ export function Slide17() {
       <div className="flex items-center justify-center gap-8 mt-4">
         <A delay={2} animation="scale">
           <div className="text-center">
-            <p className="text-gray-500 font-bold" style={{fontSize:"6rem",lineHeight:1,letterSpacing:"-0.04em"}}>~350MB</p>
-            <p className="text-sm text-gray-600 mt-2">25K entities x ~14KB</p>
-            <p className="text-sm text-gray-600">Page freezes</p>
+            <p className="text-gray-500 font-bold" style={{fontSize:"6rem",lineHeight:1,letterSpacing:"-0.04em"}}>545MB</p>
+            <p className="text-sm text-gray-600 mt-2">IDB · 25K tasks</p>
+            <p className="text-sm text-gray-600">Page freezes · even with sharding</p>
           </div>
         </A>
         <A delay={4} animation="fade">
@@ -939,19 +952,30 @@ export function Slide17() {
         </A>
         <A delay={5} animation="scale">
           <div className="text-center">
-            <p className="text-white font-bold" style={{fontSize:"6rem",lineHeight:1,letterSpacing:"-0.04em"}}>~7MB</p>
-            <p className="text-sm text-gray-400 mt-2">25K indexes + ~150 entities</p>
-            <p className="text-sm text-gray-400">50x reduction</p>
+            <p className="text-white font-bold" style={{fontSize:"6rem",lineHeight:1,letterSpacing:"-0.04em"}}>44MB</p>
+            <p className="text-sm text-gray-400 mt-2">Two-tier · 25K tasks</p>
+            <p className="text-sm text-gray-400">12x reduction</p>
           </div>
         </A>
       </div>
 
-      <A delay={8} animation="pop">
-        <p className="slide-mono text-center mt-4">
-          <span className="text-4xl font-bold">250ms</span>
-          <span className="text-lg text-gray-400 ml-3">to interactive with 25,000 tasks</span>
-        </p>
-      </A>
+      <div className="flex items-center justify-center gap-8 mt-4">
+        <A delay={8} animation="pop">
+          <div className="text-center">
+            <p className="slide-mono text-5xl font-bold text-red-400">7,600ms</p>
+            <p className="text-sm text-red-400/60 mt-1">IDB · to interactive</p>
+          </div>
+        </A>
+        <A delay={10} animation="fade">
+          <span className="text-2xl text-gray-600">→</span>
+        </A>
+        <A delay={11} animation="pop">
+          <div className="text-center">
+            <p className="slide-mono text-5xl font-bold text-green-400">600ms</p>
+            <p className="text-sm text-green-400/60 mt-1">Two-tier · to interactive</p>
+          </div>
+        </A>
+      </div>
     </div>
   );
 }
@@ -977,40 +1001,40 @@ export function Slide18() {
             <line x1="70" y1="140" x2="780" y2="140" stroke="#222" strokeWidth="1" strokeDasharray="4 4" />
 
             {/* Y labels */}
-            <text x="58" y="20" textAnchor="end" fill="#666" fontSize="13" fontFamily="monospace">1.4GB</text>
-            <text x="58" y="145" textAnchor="end" fill="#666" fontSize="13" fontFamily="monospace">700MB</text>
+            <text x="58" y="20" textAnchor="end" fill="#666" fontSize="13" fontFamily="monospace">3GB</text>
+            <text x="58" y="145" textAnchor="end" fill="#666" fontSize="13" fontFamily="monospace">1.5GB</text>
             <text x="58" y="275" textAnchor="end" fill="#666" fontSize="13" fontFamily="monospace">0</text>
 
             {/* X labels */}
-            <text x="70" y="295" textAnchor="start" fill="#666" fontSize="13" fontFamily="monospace">10K</text>
-            <text x="425" y="295" textAnchor="middle" fill="#666" fontSize="13" fontFamily="monospace">50K</text>
-            <text x="780" y="295" textAnchor="end" fill="#666" fontSize="13" fontFamily="monospace">100K</text>
+            <text x="70" y="295" textAnchor="start" fill="#666" fontSize="13" fontFamily="monospace">25K tasks</text>
+            <text x="425" y="295" textAnchor="middle" fill="#666" fontSize="13" fontFamily="monospace">50K tasks</text>
+            <text x="780" y="295" textAnchor="end" fill="#666" fontSize="13" fontFamily="monospace">100K tasks</text>
 
-            {/* Naive line — red, shooting up */}
+            {/* IDB line — red, shooting up */}
             <path
               className="graph-line-red"
-              d="M 70 255 L 280 175 L 500 95 L 780 18"
+              d="M 70 224 L 425 186 L 780 18"
               fill="none" stroke="#ef4444" strokeWidth="3.5" strokeLinecap="round"
             />
 
             {/* Two-tier line — green, flat at bottom */}
             <path
               className="graph-line-green"
-              d="M 70 258 L 280 255 L 500 253 L 780 250"
+              d="M 70 266 L 425 265 L 780 262"
               fill="none" stroke="#22c55e" strokeWidth="3.5" strokeLinecap="round"
             />
 
-            {/* Naive dot at end — red glow */}
+            {/* IDB dot at end — red glow */}
             <circle cx="780" cy="18" r="5" fill="#ef4444" className="graph-label graph-dot-red" />
 
             {/* Two-tier dot at end — green glow */}
-            <circle cx="780" cy="250" r="5" fill="#22c55e" className="graph-label graph-dot-green" />
+            <circle cx="780" cy="262" r="5" fill="#22c55e" className="graph-label graph-dot-green" />
 
             {/* Line labels — fade in */}
             <text x="750" y="12" fill="#ef4444" fontSize="15" fontWeight="bold" fontFamily="monospace" className="graph-label graph-label-red">
-              Naive
+              IDB
             </text>
-            <text x="725" y="245" fill="#22c55e" fontSize="15" fontWeight="bold" fontFamily="monospace" className="graph-label graph-label-green">
+            <text x="710" y="257" fill="#22c55e" fontSize="15" fontWeight="bold" fontFamily="monospace" className="graph-label graph-label-green">
               Two-tier
             </text>
           </svg>
@@ -1021,14 +1045,14 @@ export function Slide18() {
       <div className="grid grid-cols-2 gap-6 w-full mt-2" style={{maxWidth:"52rem"}}>
         <A delay={6}>
           <div className="border border-green-500/30 rounded-xl p-5 text-center">
-            <p className="font-medium text-green-400">Two-tier: ~7MB → ~8MB → ~9MB</p>
-            <p className="text-sm text-gray-500 mt-1">~10% growth</p>
+            <p className="font-medium text-green-400">Two-tier: 44MB → 60MB → 90MB</p>
+            <p className="text-sm text-gray-500 mt-1">~2x growth across 4x data</p>
           </div>
         </A>
         <A delay={8}>
           <div className="border border-red-500/30 rounded-xl p-5 text-center">
-            <p className="font-medium text-red-400">Naive: ~140MB → ~700MB → ~1.4GB</p>
-            <p className="text-sm text-gray-500 mt-1">Linear growth</p>
+            <p className="font-medium text-red-400">IDB: 545MB → 1,006MB → 3,000MB</p>
+            <p className="text-sm text-gray-500 mt-1">Super-linear growth · even with sharding</p>
           </div>
         </A>
       </div>
@@ -1045,7 +1069,7 @@ export function Slide19() {
       <A delay={0} animation="pop"><DoodleStar size={40} /></A>
       <A delay={2}><p className="text-3xl font-light leading-relaxed max-w-xl">The best sync engine in the world doesn&apos;t matter if your app takes<strong className="font-bold"> 3 seconds</strong> to load a task list.</p></A>
       <A delay={5} animation="fade"><DoodleLongUnderline delay="0.6s" /></A>
-      <A delay={7}><p className="text-lg text-gray-400">The unglamorous work is what makes local-first apps feel fast.</p></A>
+      <A delay={7}><p className="text-lg text-gray-400">This is the second part of building a local-first app. It should truly be local-first — no matter what.</p></A>
       <A delay={9}><p className="text-sm text-gray-500">And none of it required a third-party library.</p></A>
       <A delay={12} animation="fade"><DoodleSquiggle /></A>
       <A delay={13}><div className="flex items-center gap-3 mt-4"><DoodleSparkle /><span className="text-gray-400 slide-mono text-sm">Riken Shah · Founding Engineer @ Tasks</span><DoodleSparkle /></div></A>
@@ -1068,10 +1092,10 @@ export const allSlides = [
   <Slide8 key={8} />,
   <Slide9 key={9} />,
   <Slide10 key={10} />,
-  <Slide11 key={11} />,
-  <Slide12 key={12} />,
-  <Slide13 key={13} />,
-  <Slide14 key={14} />,
+  <Slide12 key={11} />,
+  <Slide13 key={12} />,
+  <Slide14 key={13} />,
+  <Slide11 key={14} />,
   <Slide15 key={15} />,
   <Slide16 key={16} />,
   <Slide17 key={17} />,
