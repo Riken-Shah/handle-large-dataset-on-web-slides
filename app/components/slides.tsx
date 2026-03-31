@@ -27,7 +27,7 @@ export function Slide1() {
   return (
     <div className="flex flex-col items-center justify-center text-center gap-6 max-w-4xl">
       <A delay={0} animation="pop"><DoodleStar size={32} className="mb-4" /></A>
-      <A delay={1}><h1 className="slide-title">How to Handle Large Datasets on the Web</h1></A>
+      <A delay={1}><h1 className="slide-title">How to Handle Large<br />Datasets on the Web</h1></A>
       <A delay={3} animation="fade"><DoodleLongUnderline delay="0.4s" /></A>
       <A delay={5}><p className="slide-subtitle">When local-first meets real-world scale</p></A>
       <A delay={8}>
@@ -35,6 +35,56 @@ export function Slide1() {
           <DoodleSparkle /><span className="text-gray-400 slide-mono text-sm">Riken Shah · Founding Engineer @ Tasks</span><DoodleSparkle />
         </div>
       </A>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════
+   SLIDE 1B — The Impact (teaser)
+   ═══════════════════════════════════════ */
+export function SlideImpact() {
+  return (
+    <div className="flex flex-col items-center justify-center gap-8 max-w-5xl w-full">
+      <A delay={0}><h2 className="slide-heading text-center">The Numbers</h2></A>
+
+      {/* Big before/after */}
+      <div className="flex items-center justify-center gap-8 mt-4">
+        <A delay={2} animation="scale">
+          <div className="text-center">
+            <p className="text-gray-500 font-bold" style={{fontSize:"6rem",lineHeight:1,letterSpacing:"-0.04em"}}>545MB</p>
+            <p className="text-sm text-gray-600 mt-2">IDB · 25K tasks</p>
+            <p className="text-sm text-gray-600">Page freezes · even with sharding</p>
+          </div>
+        </A>
+        <A delay={4} animation="fade">
+          <span className="text-4xl text-gray-600 mx-4">→</span>
+        </A>
+        <A delay={5} animation="scale">
+          <div className="text-center">
+            <p className="text-white font-bold" style={{fontSize:"6rem",lineHeight:1,letterSpacing:"-0.04em"}}>44MB</p>
+            <p className="text-sm text-gray-400 mt-2">Two-tier · 25K tasks</p>
+            <p className="text-sm text-gray-400">12x reduction</p>
+          </div>
+        </A>
+      </div>
+
+      <div className="flex items-center justify-center gap-8 mt-4">
+        <A delay={8} animation="pop">
+          <div className="text-center">
+            <p className="slide-mono text-5xl font-bold text-red-400">7,600ms</p>
+            <p className="text-sm text-red-400/60 mt-1">IDB · to interactive</p>
+          </div>
+        </A>
+        <A delay={10} animation="fade">
+          <span className="text-2xl text-gray-600">→</span>
+        </A>
+        <A delay={11} animation="pop">
+          <div className="text-center">
+            <p className="slide-mono text-5xl font-bold text-green-400">600ms</p>
+            <p className="text-sm text-green-400/60 mt-1">Two-tier · to interactive</p>
+          </div>
+        </A>
+      </div>
     </div>
   );
 }
@@ -503,11 +553,11 @@ export function Slide12() {
   return (
     <div className="flex flex-col items-center justify-center gap-4 max-w-5xl w-full">
       <A delay={0}><h2 className="slide-heading text-center">What If We Only Load What&apos;s Visible?</h2></A>
-      <A delay={1}><p className="text-sm text-gray-400 text-center">A viewport-aware reactive rendering engine.</p></A>
+      <A delay={1}><p className="text-sm text-gray-400 text-center">Load on demand. Free when out of view.</p></A>
 
-      <div className="flex items-center justify-center gap-12 mt-2 w-full">
+      <div className="flex items-center justify-center gap-16 mt-4 w-full">
         {/* Architecture: UI → EntityStore → DB → Disk */}
-        <div className="flex flex-col items-center gap-0 w-48 flex-shrink-0">
+        <div className="flex flex-col items-center gap-0 w-52 flex-shrink-0">
           <A delay={2} animation="down">
             <div className="border border-gray-700 rounded-lg p-2 w-full text-center">
               <p className="text-sm font-medium">UI</p>
@@ -537,60 +587,116 @@ export function Slide12() {
           </A>
         </div>
 
-        {/* Spotlight viewport demo */}
-        <A delay={5}>
-          <div className="flex-1 relative">
-            <p className="text-xs text-gray-400 slide-mono mb-2 text-center">VIEWPORT-AWARE RENDERING</p>
-            <div className="relative rounded-xl overflow-hidden p-4 bg-gray-950">
-              {/* Spotlight glow */}
-              <div className="absolute left-0 right-0 pointer-events-none" style={{
-                top: "calc(35%)",
-                height: "30%",
-                background: "radial-gradient(ellipse at center, rgba(255,255,255,0.08) 0%, transparent 70%)",
-              }} />
+        {/* Memory lifecycle diagram */}
+        <A delay={6}>
+          <div className="flex flex-col items-center gap-5 w-72">
+            <p className="text-xs text-gray-400 slide-mono uppercase tracking-widest">Memory Lifecycle</p>
 
-              <div className="flex flex-col gap-1.5">
-                {Array.from({length:16}).map((_,i) => {
-                  const isVisible = i >= 5 && i <= 10;
-                  const isBuffer = i === 4 || i === 11;
-                  return (
-                    <div key={i} className="flex items-center gap-3">
-                      <div className={`flex-1 h-5 rounded-sm transition-all ${
-                        isVisible
-                          ? "bg-white shadow-[0_0_12px_rgba(255,255,255,0.4)]"
-                          : isBuffer
-                          ? "bg-gray-500"
-                          : "bg-transparent border border-gray-800"
-                      }`}
-                      style={isVisible ? {
-                        animation: "spotlight-pulse 2s ease-in-out infinite",
-                        animationDelay: `${(i-5)*0.15}s`,
-                      } : {}}
-                      />
-                      <span className="text-[8px] slide-mono w-16 text-right" style={{color: isVisible ? "#fff" : isBuffer ? "#666" : "#333"}}>
-                        {isVisible ? "hydrated" : isBuffer ? "buffer" : "index only"}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
+            {/* Visual: scrolling list with load/unload arrows */}
+            <div className="w-full flex flex-col gap-1">
+              {Array.from({length:9}).map((_,i) => {
+                const isVisible = i >= 3 && i <= 5;
+                const isLoading = i === 2;
+                const isUnloading = i === 6;
+                return (
+                  <div key={i} className="flex items-center gap-2">
+                    {/* Left arrows */}
+                    <span className="text-[10px] w-12 text-right slide-mono flex-shrink-0">
+                      {isLoading && <span className="text-green-400">load ↓</span>}
+                      {isUnloading && <span className="text-red-400">free ↑</span>}
+                    </span>
+                    {/* Bar */}
+                    <div className={`flex-1 h-5 rounded-sm ${
+                      isVisible ? "bg-white shadow-[0_0_8px_rgba(255,255,255,0.3)]" :
+                      isLoading ? "bg-green-500/30 border border-green-500/40" :
+                      isUnloading ? "bg-red-500/20 border border-red-500/30" :
+                      "bg-transparent border border-gray-800"
+                    }`} style={isVisible ? {animation:"spotlight-pulse 2s ease-in-out infinite", animationDelay:`${(i-3)*0.2}s`} : {}} />
+                    {/* Right label */}
+                    <span className={`text-[9px] slide-mono w-14 flex-shrink-0 ${
+                      isVisible ? "text-white" : isLoading ? "text-green-400" : isUnloading ? "text-red-400" : "text-gray-600"
+                    }`}>
+                      {isVisible ? "14KB" : isLoading ? "hydrating" : isUnloading ? "→ GC" : "200B"}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
 
-              {/* Floating particles from disk to visible */}
-              {[0,1,2].map(j => (
-                <div key={j} className="absolute w-1 h-1 bg-white rounded-full" style={{
-                  left: `${30+j*20}%`,
-                  animation: "viewport-particle 2.5s ease-in-out infinite",
-                  animationDelay: `${j*0.8}s`,
-                  bottom: 0,
-                }} />
-              ))}
+            {/* Summary */}
+            <div className="flex justify-between w-full text-[10px] text-gray-500 border-t border-gray-800 pt-3">
+              <span>3 loaded × 14KB = <span className="text-white font-medium">42KB</span></span>
+              <span>6 indexes × 200B = <span className="text-white font-medium">1.2KB</span></span>
             </div>
           </div>
         </A>
       </div>
 
-      <A delay={12}><p className="text-xs text-gray-400 text-center">Scroll in → hydrate from disk. Scroll out → unload, keep index. Memory stays ~7MB.</p></A>
-      <A delay={14}><p className="text-[10px] text-gray-600 text-center slide-mono">zero third-party deps except MobX for observability</p></A>
+      <A delay={12}><p className="text-xs text-gray-400 text-center">Memory stays flat — no matter how large the dataset.</p></A>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════
+   SLIDE 12B — Viewport-Aware Rendering
+   ═══════════════════════════════════════ */
+export function SlideViewport() {
+  return (
+    <div className="flex flex-col items-center justify-center gap-4 max-w-4xl w-full">
+      <A delay={0}><h2 className="slide-heading text-center">Viewport-Aware Rendering</h2></A>
+      <A delay={1}><p className="text-sm text-gray-400 text-center">Only hydrated items live in the DOM. Everything else is a lightweight index.</p></A>
+
+      <A delay={2}>
+        <div className="relative mt-4" style={{width:"32rem"}}>
+          <p className="text-xs text-gray-500 slide-mono mb-3 text-center uppercase tracking-widest">Dataset — 25,000 items</p>
+          <div className="relative rounded-xl overflow-hidden p-4 bg-gray-950">
+            {/* Spotlight glow */}
+            <div className="absolute left-0 right-0 pointer-events-none" style={{
+              top: "calc(35%)",
+              height: "30%",
+              background: "radial-gradient(ellipse at center, rgba(255,255,255,0.08) 0%, transparent 70%)",
+            }} />
+
+            <div className="flex flex-col gap-1.5">
+              {Array.from({length:16}).map((_,i) => {
+                const isVisible = i >= 5 && i <= 10;
+                const isBuffer = i === 4 || i === 11;
+                return (
+                  <div key={i} className="flex items-center gap-3">
+                    <div className={`flex-1 h-5 rounded-sm transition-all ${
+                      isVisible
+                        ? "bg-white shadow-[0_0_12px_rgba(255,255,255,0.4)]"
+                        : isBuffer
+                        ? "bg-gray-500"
+                        : "bg-transparent border border-gray-800"
+                    }`}
+                    style={isVisible ? {
+                      animation: "spotlight-pulse 2s ease-in-out infinite",
+                      animationDelay: `${(i-5)*0.15}s`,
+                    } : {}}
+                    />
+                    <span className="text-[8px] slide-mono w-16 text-right" style={{color: isVisible ? "#fff" : isBuffer ? "#666" : "#333"}}>
+                      {isVisible ? "hydrated" : isBuffer ? "buffer" : "index only"}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Floating particles from disk to visible */}
+            {[0,1,2].map(j => (
+              <div key={j} className="absolute w-1 h-1 bg-white rounded-full" style={{
+                left: `${30+j*20}%`,
+                animation: "viewport-particle 2.5s ease-in-out infinite",
+                animationDelay: `${j*0.8}s`,
+                bottom: 0,
+              }} />
+            ))}
+          </div>
+        </div>
+      </A>
+
+      <A delay={6}><p className="text-xs text-gray-400 text-center">Scroll in → hydrate. Scroll out → unload. Memory stays ~7MB.</p></A>
     </div>
   );
 }
@@ -610,7 +716,7 @@ export function Slide13() {
   return (
     <div className="flex flex-col items-center justify-center gap-4 max-w-5xl w-full">
       <A delay={0}><h2 className="slide-heading text-center">How EntityStore Works</h2></A>
-      <A delay={1}><p className="text-sm text-gray-500 text-center max-w-xl">Register a query once. EntityStore keeps it alive — indexes update without re-rendering.</p></A>
+      <A delay={1}><p className="text-sm text-gray-500 text-center max-w-xl">This is how we solve mutation handling. Register a query once — EntityStore keeps it alive. No table-level re-queries. No O(n) re-evaluation.</p></A>
 
       {/* Main layout: steps left, board right */}
       <div className="flex items-center gap-10 mt-1 w-full">
@@ -754,113 +860,10 @@ export function Slide14() {
   );
 }
 
-/* ═══════════════════════════════════════
-   SLIDE 15 — Why Indexes Instead of Full Entities
-   ═══════════════════════════════════════ */
-export function Slide15() {
-  const fullFields = ["observable fields","proxy wrappers","junction maps","computed getters","autoload data","full content"];
-  const indexFields = ["id","order","componentId","computedState"];
-  return (
-    <div className="flex flex-col items-center justify-center gap-4 max-w-3xl w-full">
-      <A delay={0}><h2 className="slide-heading text-center">Why Indexes Instead of Full Entities?</h2></A>
-
-      {/* Cards + bar graph */}
-      <div className="flex flex-col items-center gap-6 mt-2 w-full">
-
-        {/* Top: two cards side by side with vs */}
-        <div className="flex items-stretch gap-6 w-full">
-          {/* Full Entity card */}
-          <A delay={2} className="flex-1">
-            <div className="border border-red-500/20 rounded-xl p-6 px-7 h-full flex flex-col" style={{background:"rgba(239,68,68,0.03)"}}>
-              <p className="font-bold text-lg mb-1">Full Entity</p>
-              <p className="text-[10px] text-gray-600 mb-3">What MobX loads per task</p>
-              <div className="flex flex-col gap-2.5 mb-4">
-                {fullFields.map(f=>(
-                  <div key={f} className="flex items-center gap-2.5">
-                    <div className="w-2 h-2 rounded-full bg-red-400/50 flex-shrink-0" />
-                    <span className="text-xs text-gray-300 slide-mono">{f}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-auto pt-3 border-t border-red-500/10">
-                <p className="text-[10px] text-gray-500 slide-mono">~14 KB per entity</p>
-                <p className="font-bold mt-1 text-red-400 text-2xl">~350 MB</p>
-              </div>
-            </div>
-          </A>
-
-          {/* VS */}
-          <div className="flex items-center">
-            <A delay={5} animation="pop">
-              <span className="text-xl text-gray-600 font-light">vs</span>
-            </A>
-          </div>
-
-          {/* Index Only card */}
-          <A delay={6} className="flex-1">
-            <div className="border border-green-500/20 rounded-xl p-6 px-7 h-full flex flex-col" style={{background:"rgba(34,197,94,0.03)"}}>
-              <p className="font-bold text-lg mb-1">Index Only</p>
-              <p className="text-[10px] text-gray-600 mb-3">What we keep in memory</p>
-              <div className="flex flex-col gap-2.5 mb-4">
-                {indexFields.map(f=>(
-                  <div key={f} className="flex items-center gap-2.5">
-                    <div className="w-2 h-2 rounded-full bg-green-400/50 flex-shrink-0" />
-                    <span className="text-xs text-white slide-mono">{f}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-auto pt-3 border-t border-green-500/10">
-                <p className="text-[10px] text-gray-400 slide-mono">~200 bytes per entry</p>
-                <p className="font-bold mt-1 text-green-400 text-2xl">~5 MB</p>
-              </div>
-            </div>
-          </A>
-        </div>
-
-        {/* Bottom: bar graph comparison */}
-        <div className="w-full">
-          <A delay={8}>
-            <p className="text-xs text-gray-500 uppercase tracking-widest mb-3">Memory Comparison</p>
-          </A>
-
-          {/* Full Entity bar */}
-          <A delay={9}>
-            <div className="mb-3">
-              <div className="flex justify-between text-xs mb-1">
-                <span className="text-gray-400 slide-mono">Full Entity</span>
-                <span className="text-red-400 slide-mono font-bold">350 MB</span>
-              </div>
-              <div className="h-7 rounded bg-white/5 overflow-hidden">
-                <div className="h-full rounded bg-red-500/50 idx-bar-full" />
-              </div>
-            </div>
-          </A>
-
-          {/* Index Only bar */}
-          <A delay={11}>
-            <div>
-              <div className="flex justify-between text-xs mb-1">
-                <span className="text-gray-400 slide-mono">Index Only</span>
-                <span className="text-green-400 slide-mono font-bold">5 MB</span>
-              </div>
-              <div className="h-7 rounded bg-white/5 overflow-hidden">
-                <div className="h-full rounded bg-green-500/50 idx-bar-index" />
-              </div>
-            </div>
-          </A>
-
-          {/* 70x callout */}
-          <A delay={13} animation="pop">
-            <div className="mt-4 pt-4 border-t border-gray-800 text-center">
-              <span className="text-4xl font-bold">70x</span>
-              <p className="text-sm text-gray-400 mt-1">less memory</p>
-            </div>
-          </A>
-        </div>
-      </div>
-    </div>
-  );
-}
+// ═══════════════════════════════════════
+// SLIDE 15 — Why Indexes Instead of Full Entities
+// (COMMENTED OUT — removed from presentation)
+// ═══════════════════════════════════════
 
 /* ═══════════════════════════════════════
    SLIDE 16 — The Hybrid Model
@@ -1083,6 +1086,7 @@ export function Slide19() {
    ═══════════════════════════════════════ */
 export const allSlides = [
   <Slide1 key={1} />,
+  <SlideImpact key="impact" />,
   <Slide2 key={2} />,
   <Slide3 key={3} />,
   <Slide4 key={4} />,
@@ -1093,10 +1097,10 @@ export const allSlides = [
   <Slide9 key={9} />,
   <Slide10 key={10} />,
   <Slide12 key={11} />,
+  <SlideViewport key="viewport" />,
   <Slide13 key={12} />,
   <Slide14 key={13} />,
   <Slide11 key={14} />,
-  <Slide15 key={15} />,
   <Slide16 key={16} />,
   <Slide17 key={17} />,
   <Slide18 key={18} />,

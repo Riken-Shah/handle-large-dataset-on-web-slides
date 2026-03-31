@@ -1,11 +1,11 @@
 [
   {
     "slide": 1,
-    "title": "Title",
+    "title": "How to Handle Large Datasets on the Web",
     "onScreen": {
       "heading": "How to Handle Large Datasets on the Web",
       "subtitle": "When local-first meets real-world scale",
-      "footer": "Riken Shah · Founding Engineer @ Tasks"
+      "presenter": "Riken Shah · Founding Engineer @ Tasks"
     },
     "talkingPoints": [
       "Welcome, today I want to talk about a problem that is massively under-discussed in the local-first community.",
@@ -15,6 +15,25 @@
   },
   {
     "slide": 2,
+    "title": "The Numbers (Teaser)",
+    "onScreen": {
+      "heading": "The Numbers",
+      "memoryComparison": {
+        "before": { "value": "545MB", "description": "IDB · 25K tasks", "note": "Page freezes · even with sharding" },
+        "after": { "value": "44MB", "description": "Two-tier · 25K tasks", "note": "12x reduction" }
+      },
+      "startupComparison": {
+        "before": { "value": "7,600ms", "color": "red", "description": "IDB · to interactive" },
+        "after": { "value": "600ms", "color": "green", "description": "Two-tier · to interactive" }
+      }
+    },
+    "talkingPoints": [
+      "Here's the punchline. IDB with 25K tasks: 545MB. Page freezes.",
+      "Two-tier: 44MB. 12x reduction. 600ms to interactive vs 7,600ms. Let me show you how we got here."
+    ]
+  },
+  {
+    "slide": 3,
     "title": "How Does a Local-First App Work?",
     "onScreen": {
       "heading": "How Does a Local-First App Work?",
@@ -34,13 +53,14 @@
     "title": "How I Got Here",
     "onScreen": {
       "heading": "How I Got Here",
-      "image": "Tasks app screenshot",
+      "image": "Tasks App screenshot (700K+ downloads, 4.8 stars)",
       "steps": [
         "01 — Built Tasks: 700K+ downloads, 4.8 stars",
         "02 — Custom CRDT sync engine, no third-party libs",
         "03 — Started building the web version with IDB",
         "04 — Tested with real data. App collapsed at 10K tasks."
-      ]
+      ],
+      "visual": "Animated connecting line through numbered steps"
     },
     "talkingPoints": [
       "I'm Riken, founding engineer at Tasks. 700K+ downloads, 4.8 stars. Built our sync engine from scratch — custom CRDT, no third-party libs.",
@@ -54,9 +74,15 @@
     "onScreen": {
       "heading": "Then We Hit 10,000 Tasks",
       "quote": "V0 looked great. Then real users showed up.",
-      "visual": "Three grids side by side: 100 (smooth, checkmark) → 10K (laggy, pulsing, warning) → 100K (frozen, unresponsive, explosion)",
-      "footer": "Same app. Same code. Just more data.",
-      "punchline": "Local-first ≠ all data in memory."
+      "comparison": [
+        { "count": "100", "status": "smooth", "visual": "white blocks with checkmark" },
+        { "count": "10K", "status": "laggy", "visual": "gray pulsing blocks with warning" },
+        { "count": "100K", "status": "unresponsive", "visual": "dark blocks with frozen overlay and explosion" }
+      ],
+      "closingLines": [
+        "Same app. Same code. Just more data.",
+        "Local-first ≠ Janky Experience"
+      ]
     },
     "talkingPoints": [
       "V0 looked great. Then real data showed up.",
@@ -71,11 +97,12 @@
       "heading": "4 Walls I Hit",
       "subtitle": "Each one nearly killed the web version.",
       "problems": [
-        "01 Memory — Can't keep everything in the JS heap",
-        "02 DOM Rendering — 10K nodes = browser meltdown",
-        "03 Mutations — One change re-renders everything",
-        "04 Storage Speed — Random access is too slow"
-      ]
+        { "number": "01", "title": "Memory", "description": "Can't keep everything in the JS heap" },
+        { "number": "02", "title": "DOM Rendering", "description": "10K nodes = browser meltdown" },
+        { "number": "03", "title": "Mutations", "description": "One change re-renders everything" },
+        { "number": "04", "title": "Storage Speed", "description": "Random access is too slow" }
+      ],
+      "layout": "2x2 grid of centered cards with icons"
     },
     "talkingPoints": [
       "Building a local-first app at scale means solving all four of these.",
@@ -106,11 +133,15 @@
     "onScreen": {
       "label": "Problem 2",
       "heading": "DOM Rendering is Expensive",
-      "visual": "Three growing grids: 100 (white, checkmark) → 1,400 (gray, warning) → 10K+ (dark, explosion)",
-      "bullets": [
-        "✕ Style recalculation across the entire tree on every change",
-        "✕ Layout reflows recompute positions for every element",
-        "💥 Adding 1 node to 10K? Browser recomputes everything."
+      "nodeComparison": [
+        { "count": "100", "status": "checkmark" },
+        { "count": "1,400", "status": "warning" },
+        { "count": "10K+", "status": "explosion" }
+      ],
+      "problems": [
+        "Style recalculation across the entire tree on every change",
+        "Layout reflows recompute positions for every element",
+        "Adding 1 node to 10K? Browser recomputes everything."
       ]
     },
     "talkingPoints": [
@@ -125,8 +156,8 @@
     "onScreen": {
       "label": "Problem 3",
       "heading": "Mutation Handling",
-      "subtitle": "Databases like DexieDB give you table-level hooks. When one task changes, the entire table re-queries.",
-      "visual": "5×4 grid of blocks all blinking — ONE TASK CHANGES → ENTIRE TABLE RE-RENDERS",
+      "body": "Databases like DexieDB give you table-level hooks. When one task changes, the entire table re-queries.",
+      "visual": "5×4 grid of blinking blocks — ONE TASK CHANGES → ENTIRE TABLE RE-RENDERS",
       "stat": "O(n)",
       "detail": "Every component re-evaluates. Every card re-renders.",
       "footer": "No onChange, no triggers. How do we make updates surgical?"
@@ -144,9 +175,9 @@
       "heading": "What Everyone Tries",
       "subtitle": "Windowing solves most of it. But none avoid re-querying on every update.",
       "approaches": [
-        { "name": "Pagination", "desc": "Split into pages, load one at a time", "memory": true, "dom": true, "updates": false },
-        { "name": "Virtualization", "desc": "Recycle DOM nodes, all data in heap", "memory": false, "dom": true, "updates": false },
-        { "name": "Windowing", "desc": "Load + render only near viewport", "memory": true, "dom": true, "updates": false }
+        { "name": "Pagination", "desc": "Split into pages, load one at a time", "memory": true, "dom": true, "updates": false, "ux": false },
+        { "name": "Virtualization", "desc": "Recycle DOM nodes, all data in heap", "memory": false, "dom": true, "updates": false, "ux": true },
+        { "name": "Windowing", "desc": "Load + render only near viewport", "memory": true, "dom": true, "updates": false, "ux": true }
       ],
       "punchline": "Updates — always off. Every change re-queries the entire dataset.",
       "footer": "You can pick Memory + DOM. But who avoids the re-renders?"
@@ -179,34 +210,14 @@
   },
   {
     "slide": 11,
-    "title": "Each Storage Has a Strength",
-    "onScreen": {
-      "heading": "Each Storage Has a Strength",
-      "meta": "100K tasks · real queries · median of 3 runs",
-      "benchmarks": {
-        "randomAccess": { "idb": "37.6 ms", "opfs": "8.5 ms", "winner": "OPFS 4.4×", "note": "most important for our use case" },
-        "sequentialReads": { "idb": "2,061 ms", "opfs": "3,993 ms", "winner": "IDB 1.9×" },
-        "writes": { "idb": "75.2 s", "opfs": "30.8 s", "winner": "OPFS 2.4×" }
-      },
-      "punchline": "Neither is better. What if we use both?"
-    },
-    "talkingPoints": [
-      "I benchmarked IDB against SQLite WASM on OPFS. 100K tasks, real queries.",
-      "Random access — the one windowing needs — OPFS is 4.4x faster. 8.5ms vs 37.6ms.",
-      "Sequential reads — IDB wins by 1.9x. Writes — OPFS 2.4x faster.",
-      "Neither is strictly better. Each has a strength. What if we use both?"
-    ]
-  },
-  {
-    "slide": 12,
     "title": "What If We Only Load What's Visible?",
     "onScreen": {
       "heading": "What If We Only Load What's Visible?",
       "subtitle": "A viewport-aware reactive rendering engine.",
-      "architecture": "UI → EntityStore (indexes + hydrated visible) → Database → Disk",
-      "visual": "16 rows: 6 visible (glowing white, 'hydrated'), 2 buffer (gray), rest ('index only'). Floating particles rising from disk.",
-      "footer": "Scroll in → hydrate from disk. Scroll out → unload, keep index. Memory stays ~7MB.",
-      "note": "zero third-party deps except MobX for observability"
+      "architectureDiagram": ["UI — visible cards only", "↓", "EntityStore — indexes + hydrated visible", "↓", "Database — fast random access", "↓", "Disk"],
+      "viewportDemo": "16-row list: items 5-10 'hydrated' (white, glowing), items 4 and 11 'buffer' (gray), rest 'index only' (dark). Floating particles animate upward.",
+      "closingLine": "Scroll in → hydrate from disk. Scroll out → unload, keep index. Memory stays ~7MB.",
+      "footnote": "zero third-party deps except MobX for observability"
     },
     "talkingPoints": [
       "A viewport-aware, reactive rendering engine. Only loads what users see.",
@@ -216,19 +227,19 @@
     ]
   },
   {
-    "slide": 13,
+    "slide": 12,
     "title": "How EntityStore Works",
     "onScreen": {
       "heading": "How EntityStore Works",
       "subtitle": "Register a query once. EntityStore keeps it alive — indexes update without re-rendering.",
       "steps": [
-        { "num": 1, "color": "green", "title": "Register your query", "detail": "store.query({ board: \"sprint-1\" })" },
-        { "num": 2, "color": "blue", "title": "EntityStore returns indexes", "detail": "Lightweight pointers to every matching entity. Not full objects." },
-        { "num": 3, "color": "purple", "title": "Query becomes observable", "detail": "Task added, moved, or deleted? Indexes auto-update. No re-query." },
-        { "num": 4, "color": "amber", "title": "Minimal re-renders", "detail": "Only the affected visible entity re-renders. Everything else stays untouched." }
+        { "number": 1, "color": "green", "text": "Register your query", "detail": "store.query({ board: \"sprint-1\" })" },
+        { "number": 2, "color": "blue", "text": "EntityStore returns indexes", "detail": "Lightweight pointers to every matching entity. Not full objects." },
+        { "number": 3, "color": "purple", "text": "Query becomes observable", "detail": "Task added, moved, or deleted? Indexes auto-update. No re-query." },
+        { "number": 4, "color": "amber", "text": "Minimal re-renders", "detail": "Only the affected visible entity re-renders. Everything else stays untouched." }
       ],
-      "visual": "Live kanban board (To Do / Active / Done) with green pulsing matched cards. '✓ always in sync / query never re-runs'",
-      "punchline": "Query once → observe forever. Minimal re-renders. No recomputation."
+      "liveBoard": "Kanban board: To Do (3 cards), Active (2 green pulsing + 2 gray), Done (2 cards). '✓ always in sync / query never re-runs'",
+      "tagline": ["Query once → observe forever.", "Minimal re-renders. No recomputation."]
     },
     "talkingPoints": [
       "Here's how the observable query system works.",
@@ -240,19 +251,19 @@
     ]
   },
   {
-    "slide": 14,
+    "slide": 13,
     "title": "How We Do This: MobX",
     "onScreen": {
       "heading": "How We Do This: MobX",
-      "subtitle": "EntityStore uses MobX under the hood. Each entity is independently observable.",
+      "subtitle": "EntityStore uses MobX under the hood. Each entity is independently observable — updates are surgical, not global.",
       "comparison": {
-        "left": { "label": "WITHOUT MobX", "visual": "5×3 grid all blinking", "stat": "O(n)" },
-        "right": { "label": "WITH MobX OBSERVER", "visual": "5×3 grid, only 1 block blinks", "stat": "O(1)", "detail": "only the changed entity re-renders" }
+        "withoutMobX": { "label": "WITHOUT MobX", "visual": "5×3 grid all blinking", "complexity": "O(n)", "description": "re-query entire list on every change" },
+        "withMobX": { "label": "WITH MobX OBSERVER", "visual": "5×3 grid, only 1 block highlighted", "complexity": "O(1)", "description": "only the changed entity re-renders" }
       },
       "entityCascade": {
-        "label": "A task is never just a task:",
+        "text": "A task is never just a task:",
         "entities": ["Task", "Properties (5)", "Tags (~3)", "Comments", "Assets"],
-        "detail": "1 task = ~9 entities. MobX makes each one independently observable."
+        "footnote": "1 task = ~9 entities. MobX makes each one independently observable."
       },
       "credit": "Inspired by Linear's approach to per-entity observability at scale."
     },
@@ -265,28 +276,46 @@
     ]
   },
   {
+    "slide": 14,
+    "title": "Each Storage Has a Strength",
+    "onScreen": {
+      "heading": "Each Storage Has a Strength",
+      "benchmarkInfo": "100K tasks · real queries · median of 3 runs",
+      "benchmarks": {
+        "randomAccess": { "label": "Random Access", "note": "most important for our use case", "winner": "OPFS 4.4×", "IDB": "37.6 ms", "OPFS": "8.5 ms" },
+        "sequentialReads": { "label": "Sequential Reads", "winner": "IDB 1.9×", "IDB": "2,061 ms", "OPFS": "3,993 ms" },
+        "writes": { "label": "Writes", "winner": "OPFS 2.4×", "IDB": "75.2 s", "OPFS": "30.8 s" }
+      },
+      "closing": "Neither is better. What if we use both?"
+    },
+    "talkingPoints": [
+      "I benchmarked IDB against SQLite WASM on OPFS. 100K tasks, real queries.",
+      "Random access — the one windowing needs — OPFS is 4.4x faster. 8.5ms vs 37.6ms.",
+      "Sequential reads — IDB wins by 1.9x. Writes — OPFS 2.4x faster.",
+      "Neither is strictly better. Each has a strength. What if we use both?"
+    ]
+  },
+  {
     "slide": 15,
     "title": "Why Indexes Instead of Full Entities?",
     "onScreen": {
       "heading": "Why Indexes Instead of Full Entities?",
-      "cards": {
-        "fullEntity": {
-          "title": "Full Entity",
-          "subtitle": "What MobX loads per task",
-          "fields": ["observable fields", "proxy wrappers", "junction maps", "computed getters", "autoload data", "full content"],
-          "size": "~14 KB per entity",
-          "total": "~350 MB"
-        },
-        "indexOnly": {
-          "title": "Index Only",
-          "subtitle": "What we keep in memory",
-          "fields": ["id", "order", "componentId", "computedState"],
-          "size": "~200 bytes per entry",
-          "total": "~5 MB"
-        }
+      "fullEntity": {
+        "title": "Full Entity",
+        "subtitle": "What MobX loads per task",
+        "fields": ["observable fields", "proxy wrappers", "junction maps", "computed getters", "autoload data", "full content"],
+        "size": "~14 KB per entity",
+        "total": "~350 MB"
       },
-      "barGraph": "Full Entity bar (100%) vs Index Only bar (1.4%) — visual memory comparison",
-      "punchline": "70x less memory"
+      "indexOnly": {
+        "title": "Index Only",
+        "subtitle": "What we keep in memory",
+        "fields": ["id", "order", "componentId", "computedState"],
+        "size": "~200 bytes per entry",
+        "total": "~5 MB"
+      },
+      "barGraph": { "fullEntity": "350 MB (red, full width)", "indexOnly": "5 MB (green, tiny)" },
+      "callout": "70x less memory"
     },
     "talkingPoints": [
       "Full entities: each carries observable fields, proxy wrappers, junction maps. ~14KB each. At 25K — 350MB. Tab crashes.",
@@ -299,10 +328,10 @@
     "title": "The Hybrid Model",
     "onScreen": {
       "heading": "The Hybrid Model",
-      "flow": "IDB (indexes, sequential) → 'startup' → EntityStore (25K indexes + ~150 visible) → 'on scroll' → SQLite (full data, WASM + OPFS)",
-      "stats": {
-        "idb": { "fires": "once", "when": "at startup" },
-        "sqlite": { "fires": "continuously", "when": "as user scrolls" }
+      "flow": "IDB (indexes, sequential) → startup → EntityStore (25K indexes + ~150 visible) → on scroll → SQLite (full data, WASM + OPFS)",
+      "summary": {
+        "IDB": { "fires": "once", "when": "at startup" },
+        "SQLite": { "fires": "continuously", "when": "as user scrolls" }
       }
     },
     "talkingPoints": [
@@ -317,13 +346,19 @@
     "title": "The Numbers",
     "onScreen": {
       "heading": "The Numbers",
-      "before": { "value": "~350MB", "detail": "25K entities × ~14KB", "note": "Page freezes" },
-      "after": { "value": "~7MB", "detail": "25K indexes + ~150 entities", "note": "50x reduction" },
-      "stat": "250ms to interactive with 25,000 tasks"
+      "memoryComparison": {
+        "before": { "value": "545MB", "description": "IDB · 25K tasks", "note": "Page freezes · even with sharding" },
+        "after": { "value": "44MB", "description": "Two-tier · 25K tasks", "note": "12x reduction" }
+      },
+      "startupComparison": {
+        "before": { "value": "7,600ms", "color": "red", "description": "IDB · to interactive" },
+        "after": { "value": "600ms", "color": "green", "description": "Two-tier · to interactive" }
+      }
     },
     "talkingPoints": [
-      "The proof. Before: 350MB. Freezes. After: 7MB. 50x reduction.",
-      "250ms to interactive with 25,000 tasks."
+      "The proof. IDB with 25K tasks: 545MB. Page freezes. Even with sharding the DB.",
+      "Two-tier with the same 25K tasks: 44MB. 12x reduction.",
+      "600ms to interactive — vs 7,600ms with IDB. That's 12x faster startup."
     ]
   },
   {
@@ -332,37 +367,38 @@
     "onScreen": {
       "heading": "Memory Stays Flat",
       "graph": {
-        "xAxis": "10K → 50K → 100K tasks",
-        "yAxis": "0 → 700MB → 1.4GB",
+        "type": "Line chart (SVG)",
+        "xAxis": ["25K tasks", "50K tasks", "100K tasks"],
+        "yAxis": ["0", "1.5GB", "3GB"],
         "lines": {
-          "naive": { "color": "red", "path": "Shoots up linearly from ~140MB to ~1.4GB" },
-          "twoTier": { "color": "green", "path": "Stays flat from ~7MB to ~9MB" }
+          "IDB": "Red line shooting up: 25K→545MB, 50K→1,006MB, 100K→3,000MB",
+          "TwoTier": "Green line nearly flat: 25K→44MB, 50K→60MB, 100K→90MB"
         }
       },
-      "summaryBoxes": [
-        { "label": "Two-tier: ~7MB → ~8MB → ~9MB", "detail": "~10% growth", "color": "green" },
-        { "label": "Naive: ~140MB → ~700MB → ~1.4GB", "detail": "Linear growth", "color": "red" }
-      ]
+      "summaryBoxes": {
+        "twoTier": { "text": "Two-tier: 44MB → 60MB → 90MB", "note": "~2x growth across 4x data" },
+        "idb": { "text": "IDB: 545MB → 1,006MB → 3,000MB", "note": "Super-linear growth · even with sharding" }
+      }
     },
     "talkingPoints": [
-      "Look at the graph. Naive approach — red line shoots up linearly. 10K to 100K goes from 140MB to 1.4GB.",
-      "Two-tier — green line stays flat. ~7MB to ~9MB. About 10% growth.",
-      "This works at 5K or 500K."
+      "Look at the graph. IDB — red line shoots up super-linearly. 25K at 545MB, 50K at 1GB, 100K at 3GB. Even with sharding.",
+      "Two-tier — green line stays nearly flat. 44MB to 60MB to 90MB. About 2x growth across 4x the data.",
+      "This works at 25K or 500K."
     ]
   },
   {
     "slide": 19,
     "title": "Closing",
     "onScreen": {
-      "quote": "The best sync engine in the world doesn't matter if your app takes 3 seconds to load a task list.",
-      "message": "The unglamorous work is what makes local-first apps feel fast.",
-      "note": "And none of it required a third-party library.",
-      "footer": "Riken Shah · Founding Engineer @ Tasks",
+      "mainQuote": "The best sync engine in the world doesn't matter if your app takes 3 seconds to load a task list.",
+      "message": "This is the second part of building a local-first app. It should truly be local-first — no matter what.",
+      "footnote": "And none of it required a third-party library.",
+      "presenter": "Riken Shah · Founding Engineer @ Tasks",
       "closing": "Thank you."
     },
     "talkingPoints": [
       "The best sync engine in the world doesn't matter if your app takes 3 seconds to load a task list.",
-      "The unglamorous work is what makes local-first apps feel fast.",
+      "This is the second part of building a local-first app. It should truly be local-first — no matter what.",
       "And none of it required a third-party library.",
       "Thank you."
     ]

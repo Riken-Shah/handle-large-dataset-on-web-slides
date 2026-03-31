@@ -9,7 +9,13 @@ const speakerNotes: string[][] = [
     "We have incredible resources for CRDTs, sync, conflict resolution. Nobody talks about what happens when all that data lands in the browser.",
     "I hit this wall. Here's what I learned.",
   ],
-  // Slide 2 — How Does a Local-First App Work?
+  // Slide 2 — The Numbers (teaser)
+  [
+    "Here's the punchline. IDB with 25K tasks: 545MB. Page freezes.",
+    "Two-tier: 44MB. 12x reduction. 600ms to interactive vs 7,600ms.",
+    "Let me show you how we got here.",
+  ],
+  // Slide 3 — How Does a Local-First App Work?
   [
     "How does a local-first app work? Let's build it step by step.",
     "First, fetch from the server — once, or incrementally. Persist to the user's device — that's what makes it local-first.",
@@ -66,14 +72,19 @@ const speakerNotes: string[][] = [
   ],
   // Slide 11 — What If We Only Load What's Visible?
   [
-    "A viewport-aware, reactive rendering engine. Only loads what users see.",
-    "Architecture: UI at the top, EntityStore in the middle — holds indexes plus hydrated visible entities — Database and Disk below.",
-    "Look at the right side — items in the dataset, only the visible ones are hydrated. The rest are lightweight indexes.",
-    "Scroll in → hydrate. Scroll out → unload. Memory stays flat.",
+    "What if we only load what's visible? Load on demand, free when out of view.",
+    "Architecture: UI at the top, EntityStore in the middle, Database and Disk below.",
+    "The lifecycle: scroll in — hydrate from disk. Visible — rendered and observable. Scroll out — unload the full entity, keep the index. GC frees memory.",
+    "Memory stays flat — no matter how large the dataset.",
+  ],
+  // Slide 11B — Viewport-Aware Rendering
+  [
+    "Here's what that looks like. Only the visible items are hydrated — everything else is a lightweight index.",
+    "Scroll in — hydrate. Scroll out — unload. Memory stays around 7MB.",
   ],
   // Slide 12 — How EntityStore Works
   [
-    "Here's how the observable query system works.",
+    "This is how we solve the mutation handling problem. Remember — IDB gives us no onChange, no triggers.",
     "Step one: you register your query with EntityStore.",
     "Step two: it returns indexes — lightweight pointers to every matching entity.",
     "Step three: that query becomes observable. Task added, moved, deleted? The indexes auto-update. No re-query.",
@@ -94,12 +105,6 @@ const speakerNotes: string[][] = [
     "Random access — the one windowing needs — OPFS is 4.4x faster. 8.5ms vs 37.6ms.",
     "Sequential reads — IDB wins by 1.9x. Writes — OPFS 2.4x faster.",
     "Neither is strictly better. Each has a strength. What if we use both?",
-  ],
-  // Slide 15 — Why Indexes Instead of Full Entities?
-  [
-    "Full entities: each carries observable fields, proxy wrappers, junction maps. ~14KB each. At 25K — 350MB. Tab crashes.",
-    "Indexes: four fields. Plain JS objects. ~200 bytes. At 25K — 5MB.",
-    "Same 25K tasks. 70x less memory. Look at the bar graph — the difference is staggering.",
   ],
   // Slide 16 — The Hybrid Model
   [
