@@ -591,23 +591,51 @@ html, body {
 
 @media (max-width: 768px) {
   .slide {
-    padding: 2rem 2rem;
+    padding: 2rem 1.25rem 3.5rem;
+    overflow-y: auto;
+    justify-content: flex-start;
   }
 
   .slide-title {
-    font-size: 2rem;
+    font-size: 1.75rem;
   }
 
   .slide-heading {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
 
-  .slide-body {
+  .slide-subtitle {
     font-size: 1rem;
   }
 
+  .slide-body {
+    font-size: 0.875rem;
+  }
+
   .slide-big-number {
-    font-size: 3rem;
+    font-size: 2.5rem;
+  }
+
+  .slide-label {
+    font-size: 0.7rem;
+  }
+
+  .diagram-node {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .diagram-node-filled {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .nav-hint {
+    display: none;
+  }
+
+  .slide-counter {
+    font-size: 0.7rem;
+    right: 1rem;
+    bottom: 0.5rem;
   }
 }
 

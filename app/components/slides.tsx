@@ -48,40 +48,40 @@ export function SlideImpact() {
       <A delay={0}><h2 className="slide-heading text-center">The Numbers</h2></A>
 
       {/* Big before/after */}
-      <div className="flex items-center justify-center gap-8 mt-4">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mt-4">
         <A delay={2} animation="scale">
           <div className="text-center">
-            <p className="text-gray-500 font-bold" style={{fontSize:"6rem",lineHeight:1,letterSpacing:"-0.04em"}}>545MB</p>
-            <p className="text-sm text-gray-600 mt-2">IDB · 25K tasks</p>
-            <p className="text-sm text-gray-600">Page freezes · even with sharding</p>
+            <p className="text-gray-500 font-bold text-5xl sm:text-7xl md:text-8xl" style={{lineHeight:1,letterSpacing:"-0.04em"}}>545MB</p>
+            <p className="text-xs sm:text-sm text-gray-600 mt-2">IDB · 25K tasks</p>
+            <p className="text-xs sm:text-sm text-gray-600">Page freezes · even with sharding</p>
           </div>
         </A>
         <A delay={4} animation="fade">
-          <span className="text-4xl text-gray-600 mx-4">→</span>
+          <span className="text-2xl sm:text-4xl text-gray-600 mx-2 sm:mx-4">→</span>
         </A>
         <A delay={5} animation="scale">
           <div className="text-center">
-            <p className="text-white font-bold" style={{fontSize:"6rem",lineHeight:1,letterSpacing:"-0.04em"}}>44MB</p>
-            <p className="text-sm text-gray-400 mt-2">Two-tier · 25K tasks</p>
-            <p className="text-sm text-gray-400">12x reduction</p>
+            <p className="text-white font-bold text-5xl sm:text-7xl md:text-8xl" style={{lineHeight:1,letterSpacing:"-0.04em"}}>44MB</p>
+            <p className="text-xs sm:text-sm text-gray-400 mt-2">Two-tier · 25K tasks</p>
+            <p className="text-xs sm:text-sm text-gray-400">12x reduction</p>
           </div>
         </A>
       </div>
 
-      <div className="flex items-center justify-center gap-8 mt-4">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mt-4">
         <A delay={8} animation="pop">
           <div className="text-center">
-            <p className="slide-mono text-5xl font-bold text-red-400">7,600ms</p>
-            <p className="text-sm text-red-400/60 mt-1">IDB · to interactive</p>
+            <p className="slide-mono text-3xl sm:text-5xl font-bold text-red-400">7,600ms</p>
+            <p className="text-xs sm:text-sm text-red-400/60 mt-1">IDB · to interactive</p>
           </div>
         </A>
         <A delay={10} animation="fade">
-          <span className="text-2xl text-gray-600">→</span>
+          <span className="text-xl sm:text-2xl text-gray-600">→</span>
         </A>
         <A delay={11} animation="pop">
           <div className="text-center">
-            <p className="slide-mono text-5xl font-bold text-green-400">600ms</p>
-            <p className="text-sm text-green-400/60 mt-1">Two-tier · to interactive</p>
+            <p className="slide-mono text-3xl sm:text-5xl font-bold text-green-400">600ms</p>
+            <p className="text-xs sm:text-sm text-green-400/60 mt-1">Two-tier · to interactive</p>
           </div>
         </A>
       </div>
@@ -119,9 +119,9 @@ export function Slide3() {
   return (
     <div className="flex flex-col items-center justify-center gap-6 max-w-5xl w-full">
       <A delay={0}><h2 className="slide-heading text-center">How I Got Here</h2></A>
-      <div className="flex items-center gap-12 mt-2 w-full">
+      <div className="flex flex-col md:flex-row items-center gap-6 md:gap-12 mt-2 w-full">
         <A delay={2} animation="scale">
-          <div className="flex-shrink-0 w-[420px] rounded-xl overflow-hidden border border-gray-700">
+          <div className="flex-shrink-0 w-full max-w-[280px] md:max-w-[420px] rounded-xl overflow-hidden border border-gray-700">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/tasks-app.jpeg" alt="Tasks App" className="w-full h-auto block" />
           </div>
@@ -162,38 +162,38 @@ export function Slide4() {
         <p className="text-gray-400 text-sm italic text-center max-w-lg">&ldquo;V0 looked great. Then real users showed up.&rdquo;</p>
       </A>
 
-      <div className="flex items-end gap-10 mt-4">
+      <div className="flex items-end gap-4 sm:gap-10 mt-4">
         {/* 100 tasks - smooth */}
         <A delay={3} animation="scale">
-          <div className="flex flex-col items-center gap-3 w-36">
+          <div className="flex flex-col items-center gap-2 sm:gap-3 w-24 sm:w-36">
             <div className="grid grid-cols-3 gap-1">
               {Array.from({length:9}).map((_,i)=>(
                 <div key={i} className="w-8 h-6 bg-white rounded-sm" />
               ))}
             </div>
-            <p className="slide-mono text-3xl font-bold">100</p>
-            <p className="text-sm text-gray-400">smooth</p>
+            <p className="slide-mono text-xl sm:text-3xl font-bold">100</p>
+            <p className="text-xs sm:text-sm text-gray-400">smooth</p>
             <DoodleCheckmark delay="0.3s" />
           </div>
         </A>
 
         {/* 10K tasks - laggy */}
         <A delay={5} animation="scale">
-          <div className="flex flex-col items-center gap-3 w-36">
+          <div className="flex flex-col items-center gap-2 sm:gap-3 w-24 sm:w-36">
             <div className="grid grid-cols-3 gap-1">
               {Array.from({length:9}).map((_,i)=>(
                 <div key={i} className="w-8 h-6 bg-gray-500 rounded-sm" style={{animation:"pulse 2s ease-in-out infinite",animationDelay:`${i*0.2}s`}} />
               ))}
             </div>
-            <p className="slide-mono text-3xl font-bold">10K</p>
-            <p className="text-sm text-gray-400">laggy</p>
+            <p className="slide-mono text-xl sm:text-3xl font-bold">10K</p>
+            <p className="text-xs sm:text-sm text-gray-400">laggy</p>
             <DoodleWarning delay="0.6s" />
           </div>
         </A>
 
         {/* 100K tasks - frozen */}
         <A delay={7} animation="scale">
-          <div className="flex flex-col items-center gap-3 w-36">
+          <div className="flex flex-col items-center gap-2 sm:gap-3 w-24 sm:w-36">
             <div className="grid grid-cols-3 gap-1 relative">
               {Array.from({length:9}).map((_,i)=>(
                 <div key={i} className="w-8 h-6 bg-gray-800 border border-gray-700 rounded-sm" />
@@ -203,8 +203,8 @@ export function Slide4() {
                 <span className="text-xs text-gray-500 slide-mono bg-black/80 px-2 py-0.5 rounded" style={{animation:"pulse 1.5s ease-in-out infinite"}}>frozen</span>
               </div>
             </div>
-            <p className="slide-mono text-3xl font-bold text-gray-500">100K</p>
-            <p className="text-sm text-gray-500">unresponsive</p>
+            <p className="slide-mono text-xl sm:text-3xl font-bold text-gray-500">100K</p>
+            <p className="text-xs sm:text-sm text-gray-500">unresponsive</p>
             <DoodleExplosion delay="0.9s" />
           </div>
         </A>
@@ -256,9 +256,9 @@ export function Slide6() {
     <div className="flex flex-col items-center justify-center gap-6 max-w-4xl w-full">
       <A delay={0}><div className="slide-label">Problem 1</div></A>
       <A delay={1}><h2 className="slide-heading text-center">We Can&apos;t Keep Everything in Memory</h2></A>
-      <div className="flex items-end gap-12 mt-4">
+      <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6 sm:gap-12 mt-4">
         <A delay={3} animation="scale">
-          <div className="fill-container w-36 h-52 relative">
+          <div className="fill-container w-28 h-40 sm:w-36 sm:h-52 relative">
             <div className="fill-bar fill-animate bg-white" style={{"--fill-height":"85%"} as React.CSSProperties} />
             <div className="absolute inset-0 flex items-center justify-center z-10"><span className="text-black font-bold text-xl mix-blend-difference">350MB</span></div>
             {[0.25,0.5,0.75].map((l,i)=>(<div key={i} className="absolute -top-2 bg-white rounded-full w-1.5 h-1.5" style={{left:`${l*100}%`,animation:"float 2s ease-in-out infinite",animationDelay:`${1.5+i*0.3}s`,opacity:0.4}} />))}
@@ -361,12 +361,12 @@ function ApproachRow({ name, desc, memory, dom, updates, ux, delay }: {
 }) {
   return (
     <A delay={delay} animation="right">
-      <div className="flex items-center gap-6 py-4 px-5 border border-gray-800 rounded-xl">
-        <div className="w-36 flex-shrink-0">
-          <p className="font-bold text-lg">{name}</p>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-6 py-3 sm:py-4 px-3 sm:px-5 border border-gray-800 rounded-xl">
+        <div className="w-full sm:w-36 flex-shrink-0">
+          <p className="font-bold text-base sm:text-lg">{name}</p>
           <p className="text-[10px] text-gray-500">{desc}</p>
         </div>
-        <div className="flex items-center gap-5 flex-1 justify-center">
+        <div className="flex items-center gap-3 sm:gap-5 flex-1 justify-start sm:justify-center flex-wrap">
           <div className="flex items-center gap-2">
             <Toggle on={memory} />
             <span className={`text-xs ${memory ? "text-white" : "text-gray-600"}`}>Memory</span>
@@ -443,10 +443,10 @@ export function Slide10() {
   return (
     <div className="flex flex-col items-center justify-center gap-6 max-w-5xl w-full">
       <A delay={0}><h2 className="slide-heading text-center">Windowing Gets Closest</h2></A>
-      <div className="flex items-start gap-12 mt-4">
+      <div className="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-12 mt-4">
         <A delay={2} animation="scale">
           <div className="relative">
-            <div className="flex flex-col gap-1 w-44">
+            <div className="flex flex-col gap-1 w-36 md:w-44">
               {Array.from({length:15}).map((_,i)=>{
                 const vis=i>=5&&i<=9,buf=i===4||i===10;
                 return <div key={i} className={`h-6 rounded-sm ${vis?"bg-white":buf?"bg-gray-500":"border border-dashed border-gray-700"}`} />;
@@ -512,7 +512,7 @@ export function Slide11() {
       </A>
 
       {/* Secondary: Sequential + Writes — side by side */}
-      <div className="grid grid-cols-2 gap-6 w-full mt-1">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 w-full mt-1">
         <A delay={6}>
           <div>
             <div className="flex items-baseline justify-between mb-3">
@@ -555,9 +555,9 @@ export function Slide12() {
       <A delay={0}><h2 className="slide-heading text-center">What If We Only Load What&apos;s Visible?</h2></A>
       <A delay={1}><p className="text-sm text-gray-400 text-center">Load on demand. Free when out of view.</p></A>
 
-      <div className="flex items-center justify-center gap-16 mt-4 w-full">
+      <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-16 mt-4 w-full">
         {/* Architecture: UI → EntityStore → DB → Disk */}
-        <div className="flex flex-col items-center gap-0 w-52 flex-shrink-0">
+        <div className="flex flex-col items-center gap-0 w-full md:w-52 flex-shrink-0">
           <A delay={2} animation="down">
             <div className="border border-gray-700 rounded-lg p-2 w-full text-center">
               <p className="text-sm font-medium">UI</p>
@@ -647,7 +647,7 @@ export function SlideViewport() {
       <A delay={1}><p className="text-sm text-gray-400 text-center">Only hydrated items live in the DOM. Everything else is a lightweight index.</p></A>
 
       <A delay={2}>
-        <div className="relative mt-4" style={{width:"32rem"}}>
+        <div className="relative mt-4 w-full" style={{maxWidth:"32rem"}}>
           <p className="text-xs text-gray-500 slide-mono mb-3 text-center uppercase tracking-widest">Dataset — 25,000 items</p>
           <div className="relative rounded-xl overflow-hidden p-4 bg-gray-950">
             {/* Spotlight glow */}
@@ -719,7 +719,7 @@ export function Slide13() {
       <A delay={1}><p className="text-sm text-gray-500 text-center max-w-xl">This is how we solve mutation handling. Register a query once — EntityStore keeps it alive. No table-level re-queries. No O(n) re-evaluation.</p></A>
 
       {/* Main layout: steps left, board right */}
-      <div className="flex items-center gap-10 mt-1 w-full">
+      <div className="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-10 mt-1 w-full">
 
         {/* Left: Numbered steps with animated connecting line */}
         <div className="relative flex flex-col flex-1">
@@ -748,7 +748,7 @@ export function Slide13() {
 
         {/* Right: Live kanban board */}
         <A delay={5} animation="scale">
-          <div className="flex-shrink-0 w-64 bg-[#0e0e0e] border border-gray-700/60 rounded-2xl p-5 flex flex-col shadow-[0_0_40px_rgba(34,197,94,0.04)]">
+          <div className="flex-shrink-0 w-full md:w-64 bg-[#0e0e0e] border border-gray-700/60 rounded-2xl p-5 flex flex-col shadow-[0_0_40px_rgba(34,197,94,0.04)]">
             <p className="text-[10px] text-gray-500 text-center tracking-[0.15em] uppercase mb-4">Live Result</p>
 
             <div className="flex gap-3 flex-1">
@@ -808,7 +808,7 @@ export function Slide14() {
       <A delay={0}><h2 className="slide-heading text-center">How We Do This: MobX</h2></A>
       <A delay={1}><p className="text-sm text-gray-500 text-center max-w-lg">EntityStore uses MobX under the hood. Each entity is independently observable — updates are surgical, not global.</p></A>
 
-      <div className="grid grid-cols-2 gap-8 mt-2 w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 mt-2 w-full">
         {/* O(n) */}
         <A delay={3}>
           <div className="border border-gray-700 rounded-lg p-4">
@@ -874,9 +874,9 @@ export function Slide16() {
       <A delay={0}><h2 className="slide-heading text-center">The Hybrid Model</h2></A>
 
       {/* Animated flow */}
-      <div className="flex items-center gap-3 mt-4">
+      <div className="flex flex-col sm:flex-row items-center gap-3 mt-4">
         <A delay={2} animation="scale">
-          <div className="border border-white rounded-xl p-4 text-center w-36">
+          <div className="border border-white rounded-xl p-3 sm:p-4 text-center w-28 sm:w-36">
             <DoodleDatabase className="mx-auto" delay="0.3s" />
             <p className="font-bold mt-2">IDB</p>
             <p className="text-[10px] text-gray-400 mt-1">indexes</p>
@@ -885,28 +885,28 @@ export function Slide16() {
         </A>
 
         <A delay={4} animation="fade">
-          <div className="flex flex-col items-center gap-1">
+          <div className="flex flex-col items-center gap-1 rotate-90 sm:rotate-0">
             <DoodleArrowRight delay="0.5s" />
             <span className="text-[8px] text-gray-500 slide-mono">startup</span>
           </div>
         </A>
 
         <A delay={5} animation="scale">
-          <div className="border-2 border-white rounded-xl p-4 text-center w-44">
+          <div className="border-2 border-white rounded-xl p-3 sm:p-4 text-center w-32 sm:w-44">
             <p className="font-bold text-lg">EntityStore</p>
             <p className="text-[10px] text-gray-400 mt-1">25K indexes + ~150 visible</p>
           </div>
         </A>
 
         <A delay={7} animation="fade">
-          <div className="flex flex-col items-center gap-1">
+          <div className="flex flex-col items-center gap-1 rotate-90 sm:rotate-0">
             <DoodleArrowRight delay="0.8s" />
             <span className="text-[8px] text-gray-500 slide-mono">on scroll</span>
           </div>
         </A>
 
         <A delay={8} animation="scale">
-          <div className="border border-white rounded-xl p-4 text-center w-36">
+          <div className="border border-white rounded-xl p-3 sm:p-4 text-center w-28 sm:w-36">
             <DoodleDatabase className="mx-auto" delay="0.9s" />
             <p className="font-bold mt-2">SQLite</p>
             <p className="text-[10px] text-gray-400 mt-1">full data</p>
@@ -942,40 +942,40 @@ export function Slide17() {
       <A delay={0}><h2 className="slide-heading text-center">The Numbers</h2></A>
 
       {/* Big before/after */}
-      <div className="flex items-center justify-center gap-8 mt-4">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mt-4">
         <A delay={2} animation="scale">
           <div className="text-center">
-            <p className="text-gray-500 font-bold" style={{fontSize:"6rem",lineHeight:1,letterSpacing:"-0.04em"}}>545MB</p>
-            <p className="text-sm text-gray-600 mt-2">IDB · 25K tasks</p>
-            <p className="text-sm text-gray-600">Page freezes · even with sharding</p>
+            <p className="text-gray-500 font-bold text-5xl sm:text-7xl md:text-8xl" style={{lineHeight:1,letterSpacing:"-0.04em"}}>545MB</p>
+            <p className="text-xs sm:text-sm text-gray-600 mt-2">IDB · 25K tasks</p>
+            <p className="text-xs sm:text-sm text-gray-600">Page freezes · even with sharding</p>
           </div>
         </A>
         <A delay={4} animation="fade">
-          <span className="text-4xl text-gray-600 mx-4">→</span>
+          <span className="text-2xl sm:text-4xl text-gray-600 mx-2 sm:mx-4">→</span>
         </A>
         <A delay={5} animation="scale">
           <div className="text-center">
-            <p className="text-white font-bold" style={{fontSize:"6rem",lineHeight:1,letterSpacing:"-0.04em"}}>44MB</p>
-            <p className="text-sm text-gray-400 mt-2">Two-tier · 25K tasks</p>
-            <p className="text-sm text-gray-400">12x reduction</p>
+            <p className="text-white font-bold text-5xl sm:text-7xl md:text-8xl" style={{lineHeight:1,letterSpacing:"-0.04em"}}>44MB</p>
+            <p className="text-xs sm:text-sm text-gray-400 mt-2">Two-tier · 25K tasks</p>
+            <p className="text-xs sm:text-sm text-gray-400">12x reduction</p>
           </div>
         </A>
       </div>
 
-      <div className="flex items-center justify-center gap-8 mt-4">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mt-4">
         <A delay={8} animation="pop">
           <div className="text-center">
-            <p className="slide-mono text-5xl font-bold text-red-400">7,600ms</p>
-            <p className="text-sm text-red-400/60 mt-1">IDB · to interactive</p>
+            <p className="slide-mono text-3xl sm:text-5xl font-bold text-red-400">7,600ms</p>
+            <p className="text-xs sm:text-sm text-red-400/60 mt-1">IDB · to interactive</p>
           </div>
         </A>
         <A delay={10} animation="fade">
-          <span className="text-2xl text-gray-600">→</span>
+          <span className="text-xl sm:text-2xl text-gray-600">→</span>
         </A>
         <A delay={11} animation="pop">
           <div className="text-center">
-            <p className="slide-mono text-5xl font-bold text-green-400">600ms</p>
-            <p className="text-sm text-green-400/60 mt-1">Two-tier · to interactive</p>
+            <p className="slide-mono text-3xl sm:text-5xl font-bold text-green-400">600ms</p>
+            <p className="text-xs sm:text-sm text-green-400/60 mt-1">Two-tier · to interactive</p>
           </div>
         </A>
       </div>
@@ -994,7 +994,7 @@ export function Slide18() {
       {/* Graph — close to heading, wide, animated via CSS so it triggers on slide active */}
       <A delay={2}>
         <div className="w-full" style={{maxWidth:"64rem"}}>
-          <svg viewBox="0 0 800 320" className="w-full" style={{height:"22rem"}}>
+          <svg viewBox="0 0 800 320" className="w-full" style={{maxHeight:"22rem"}}>
             {/* Y axis */}
             <line x1="70" y1="10" x2="70" y2="270" stroke="#444" strokeWidth="1.5" />
             {/* X axis */}
@@ -1045,7 +1045,7 @@ export function Slide18() {
       </A>
 
       {/* Summary boxes — green/red borders */}
-      <div className="grid grid-cols-2 gap-6 w-full mt-2" style={{maxWidth:"52rem"}}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 w-full mt-2" style={{maxWidth:"52rem"}}>
         <A delay={6}>
           <div className="border border-green-500/30 rounded-xl p-5 text-center">
             <p className="font-medium text-green-400">Two-tier: 44MB → 60MB → 90MB</p>
@@ -1070,7 +1070,7 @@ export function Slide19() {
   return (
     <div className="flex flex-col items-center justify-center text-center gap-8 max-w-3xl">
       <A delay={0} animation="pop"><DoodleStar size={40} /></A>
-      <A delay={2}><p className="text-3xl font-light leading-relaxed max-w-xl">The best sync engine in the world doesn&apos;t matter if your app takes<strong className="font-bold"> 3 seconds</strong> to load a task list.</p></A>
+      <A delay={2}><p className="text-xl sm:text-3xl font-light leading-relaxed max-w-xl">The best sync engine in the world doesn&apos;t matter if your app takes<strong className="font-bold"> 3 seconds</strong> to load a task list.</p></A>
       <A delay={5} animation="fade"><DoodleLongUnderline delay="0.6s" /></A>
       <A delay={7}><p className="text-lg text-gray-400">This is the second part of building a local-first app. It should truly be local-first — no matter what.</p></A>
       <A delay={9}><p className="text-sm text-gray-500">And none of it required a third-party library.</p></A>
