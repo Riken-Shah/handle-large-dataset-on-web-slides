@@ -195,8 +195,25 @@ export default function Presentation({ slides }: PresentationProps) {
 
   const notes = speakerNotes[current] || [];
 
+  const handleTap = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      // Ignore clicks on interactive elements
+      const target = e.target as HTMLElement;
+      if (target.closest("a, button, input, textarea, select")) return;
+
+      const x = e.clientX;
+      const half = window.innerWidth / 2;
+      if (x < half) {
+        goPrev();
+      } else {
+        goNext();
+      }
+    },
+    [goNext, goPrev]
+  );
+
   return (
-    <div className="presentation" tabIndex={0}>
+    <div className="presentation" tabIndex={0} onClick={handleTap}>
       {/* Slides */}
       {slides.map((slide, i) => (
         <div key={i} className={`slide ${i === current ? "active" : ""}`}>
@@ -250,7 +267,7 @@ export default function Presentation({ slides }: PresentationProps) {
       {/* Navigation hint - only on first slide */}
       {current === 0 && (
         <div className="nav-hint anim d10" style={{ animation: "fadeIn 1s ease forwards", animationDelay: "2s", opacity: 0 }}>
-          Arrow keys or Enter to navigate &middot; F for fullscreen &middot; N for notes
+          Arrow keys or Enter to navigate &middot; Tap left/right to navigate &middot; F for fullscreen &middot; N for notes
         </div>
       )}
     </div>
